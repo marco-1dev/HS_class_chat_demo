@@ -7,7 +7,7 @@ export default function Home() {
         <h1 className="mb-8 text-6xl font-bold text-center bg-gradient-to-r from-blue-600 to-yellow-600 bg-clip-text text-transparent">
           AI assistant.
         </h1>
-        <div className="bg-red rounded-2xl shadow-xl p-6">
+        <div className="bg-white rounded-2xl shadow-xl p-6">
           <Chatbot/>
         </div>
       </div>
