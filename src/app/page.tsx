@@ -2,7 +2,7 @@ import { Chatbot } from "@/components/Chatbot";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white-30 to-yellow-100 flex flex-col items-center p-8">
+    <main className="min-h-screen bg-gradient-to-br from-white-500 to-yellow-100 flex flex-col items-center p-8">
       <div className="w-full max-w-4xl">
         <h1 className="mb-8 text-6xl font-bold text-center bg-gradient-to-r from-blue-600 to-yellow-600 bg-clip-text text-transparent">
           AI assistant.
