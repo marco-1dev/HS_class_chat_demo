@@ -6,33 +6,64 @@
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useChat } from "ai/react";
+import ReactMarkdown from 'react-markdown';
 
 export function Chatbot() {
   const {messages, input, handleInputChange, handleSubmit} = useChat()
 
   return (
-    <div className="h-96 w-full max-w-[700px] ">
+    <div className="h-[600px] w-full">
       <div className="flex flex-col h-full ">
         
         
-        <div className="flex-grow rounded-lg border p-4">
-        {messages.map((m, index) => (
-              
-              <p className="whitespace-pre-line" key={index}>
-                {m.content}
-                </p>
-            ))}
-
+        <div className="flex-grow rounded-lg border p-4 overflow-y-auto">
+          {messages.map((m, index) => (
+            <div key={index} className={`mb-4 p-3 rounded-lg ${
+              m.role === 'user' 
+                ? 'bg-blue-100 text-blue-900 ml-12' 
+                : 'bg-gray-100 text-gray-900 mr-12'
+            }`}>
+              <div className="text-xs font-semibold mb-1 uppercase tracking-wide opacity-70">
+                {m.role === 'user' ? 'You' : 'Assistant'}
+              </div>
+              {m.role === 'user' ? (
+                <p className="whitespace-pre-line">{m.content}</p>
+              ) : (
+                <div className="prose prose-sm max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-blue-600 prose-strong:text-gray-900 prose-code:text-pink-600 prose-code:bg-gray-100 prose-pre:bg-gray-100">
+                  <ReactMarkdown
+                    components={{
+                      h1: ({children}) => <h1 className="text-xl font-bold mb-2">{children}</h1>,
+                      h2: ({children}) => <h2 className="text-lg font-semibold mb-2">{children}</h2>,
+                      h3: ({children}) => <h3 className="text-base font-medium mb-1">{children}</h3>,
+                      p: ({children}) => <p className="mb-2">{children}</p>,
+                      code: ({children}) => <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">{children}</code>,
+                      pre: ({children}) => <pre className="bg-gray-100 p-2 rounded overflow-x-auto mb-2">{children}</pre>,
+                      ul: ({children}) => <ul className="list-disc list-inside mb-2">{children}</ul>,
+                      ol: ({children}) => <ol className="list-decimal list-inside mb-2">{children}</ol>,
+                      li: ({children}) => <li className="mb-1">{children}</li>,
+                      strong: ({children}) => <strong className="font-semibold">{children}</strong>,
+                      em: ({children}) => <em className="italic">{children}</em>
+                    }}
+                  >
+                    {m.content}
+                  </ReactMarkdown>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
           
       
-        <div className=" flex items-center p-2">
-          <form className="flex-1" onSubmit={handleSubmit}>
-            <Input placeholder="Type your message here..." value={input} onChange={handleInputChange}  />
+        <div className="flex items-center p-2">
+          <form className="flex-1 flex gap-2" onSubmit={handleSubmit}>
+            <Input placeholder="Type your message here..." value={input} onChange={handleInputChange} />
+            <Button type="submit" className="bg-gradient-to-r from-red-500 to-cyan-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+              Send
+            </Button>
           </form>
-          <Button className="ml-2" type="submit" >
-            Send
-          </Button>
         </div>
       </div>
     </div>

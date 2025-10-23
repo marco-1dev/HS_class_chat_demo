@@ -3,12 +3,8 @@
 [![NextJS]][NextJS-url]
 ## About The Project
 
-![Gemini AI Demo][screenshot]
+#### This project is a demonstration of an AI chatbot powered by Gemini AI, Google’s large language model, integrated seamlessly within a Next.js 14 application. I've documented the entire process [here][Article-url]! You can test it out [here][Demonstration-url]
 
-## This project is a demonstration of an AI chatbot powered by Gemini AI, Google’s large language model, integrated seamlessly within a Next.js 14 application.
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Built With
 
@@ -38,27 +34,11 @@
     npm run dev
     ```
 
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-### Screenshots
+### Demo
 Desktop            |  Mobile
 :-------------------------:|:-------------------------:
 ![Desktop][desktop]  |   ![Mobile][mobile]  
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Contact
-
-Charles Edwards - [https://charlesae.dev](https://charlesae.dev)
-
-[![twitter-shield]][twitter-url]
-
-[![linkedin-shield]][linkedin-url]
-
-[![Medium]][Medium-url]
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
   <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -80,8 +60,10 @@ Charles Edwards - [https://charlesae.dev](https://charlesae.dev)
 [GoogleGemini-url]: https://gemini.google.com/app
 [Medium]: https://img.shields.io/badge/medium-%2312100E.svg?&style=flat-square&logo=medium&logoColor=white
 [Medium-url]: https://medium.com/@CharlesAE
+[Article-url]: https://medium.com/technology-hits/lets-build-an-ai-chatbot-with-gemini-ai-in-next-js-14-fc74e5c3a70d
+[Demonstration-url]: https://gemini-pro-demo.vercel.app/
 [Typescript-url]: https://typescriptlang.org/
 [Typescript]:https://img.shields.io/badge/-TypeScript-%23282C34?style=flat-square&logo=typescript&logoColor=007bcd
 [screenshot]: https://raw.githubusercontent.com/CharlesAE/gemini-ai-demo/main/screenshots/gemini_banner.jpg
-[desktop]: https://raw.githubusercontent.com/CharlesAE/gemini-ai-demo/main/screenshots/gemini_demo.gif
-[mobile]: https://raw.githubusercontent.com/CharlesAE/gemini-ai-demo/main/screenshots/mobile_gemini_demo.gif 
+[desktop]: https://raw.githubusercontent.com/CharlesAE/gemini-ai-demo/main/screenshots/desktop.gif
+[mobile]: https://raw.githubusercontent.com/CharlesAE/gemini-ai-demo/main/screenshots/mobile.gif 
