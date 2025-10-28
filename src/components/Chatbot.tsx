@@ -7,20 +7,104 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useChat } from "ai/react";
 import ReactMarkdown from 'react-markdown';
+import { useState } from 'react';
+
+type MessageType = {
+  role: 'user' | 'assistant';
+  content: string;
+  imageData?: string;
+  mimeType?: string;
+}
 
 export function Chatbot() {
-  const {messages, input, handleInputChange, handleSubmit} = useChat()
+  const {messages: chatMessages, input, handleInputChange, handleSubmit} = useChat()
+  const [mode, setMode] = useState<'chat' | 'image'>('chat')
+  const [imagePrompt, setImagePrompt] = useState('')
+  const [imageMessages, setImageMessages] = useState<MessageType[]>([])
+  const [isGenerating, setIsGenerating] = useState(false)
+
+  const handleImageGeneration = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!imagePrompt.trim() || isGenerating) return
+
+    const userMessage: MessageType = {
+      role: 'user',
+      content: imagePrompt
+    }
+    setImageMessages(prev => [...prev, userMessage])
+    setIsGenerating(true)
+    setImagePrompt('')
+
+    try {
+      const response = await fetch('/api/image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: imagePrompt }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        const assistantMessage: MessageType = {
+          role: 'assistant',
+          content: 'Generated image:',
+          imageData: data.imageData,
+          mimeType: data.mimeType
+        }
+        setImageMessages(prev => [...prev, assistantMessage])
+      } else {
+        const errorMessage: MessageType = {
+          role: 'assistant',
+          content: `Failed to generate image: ${data.error}`
+        }
+        setImageMessages(prev => [...prev, errorMessage])
+      }
+    } catch (error) {
+      const errorMessage: MessageType = {
+        role: 'assistant',
+        content: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      }
+      setImageMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
+  const messages = mode === 'chat' ? chatMessages : imageMessages
 
   return (
     <div className="h-[600px] w-full">
       <div className="flex flex-col h-full ">
-        
-        
+
+        {/* Mode Toggle */}
+        <div className="flex gap-2 mb-4 p-2 bg-gray-50 rounded-lg">
+          <Button
+            type="button"
+            onClick={() => setMode('chat')}
+            className={`flex-1 ${mode === 'chat'
+              ? 'bg-gradient-to-r from-red-500 to-cyan-600 text-white'
+              : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+          >
+            💬 Text Chat
+          </Button>
+          <Button
+            type="button"
+            onClick={() => setMode('image')}
+            className={`flex-1 ${mode === 'image'
+              ? 'bg-gradient-to-r from-red-500 to-cyan-600 text-white'
+              : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+          >
+            🎨 Image Generation
+          </Button>
+        </div>
+
         <div className="flex-grow rounded-lg border p-4 overflow-y-auto">
           {messages.map((m, index) => (
             <div key={index} className={`mb-4 p-3 rounded-lg ${
-              m.role === 'user' 
-                ? 'bg-blue-100 text-blue-900 ml-12' 
+              m.role === 'user'
+                ? 'bg-blue-100 text-blue-900 ml-12'
                 : 'bg-gray-100 text-gray-900 mr-12'
             }`}>
               <div className="text-xs font-semibold mb-1 uppercase tracking-wide opacity-70">
@@ -47,23 +131,60 @@ export function Chatbot() {
                   >
                     {m.content}
                   </ReactMarkdown>
+                  {/* Display generated image if available */}
+                  {mode === 'image' && 'imageData' in m && m.imageData && (
+                    <div className="mt-3">
+                      <img
+                        src={`data:${m.mimeType || 'image/png'};base64,${m.imageData}`}
+                        alt="Generated image"
+                        className="max-w-full rounded-lg shadow-md"
+                      />
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           ))}
+          {isGenerating && mode === 'image' && (
+            <div className="flex justify-center items-center py-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+              <span className="ml-2 text-gray-600">Generating image...</span>
+            </div>
+          )}
         </div>
           
       
         <div className="flex items-center p-2">
-          <form className="flex-1 flex gap-2" onSubmit={handleSubmit}>
-            <Input placeholder="Type your message here..." value={input} onChange={handleInputChange} />
-            <Button type="submit" className="bg-gradient-to-r from-red-500 to-cyan-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
-              Send
-            </Button>
-          </form>
+          {mode === 'chat' ? (
+            <form className="flex-1 flex gap-2" onSubmit={handleSubmit}>
+              <Input placeholder="Type your message here..." value={input} onChange={handleInputChange} />
+              <Button type="submit" className="bg-gradient-to-r from-red-500 to-cyan-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+                Send
+              </Button>
+            </form>
+          ) : (
+            <form className="flex-1 flex gap-2" onSubmit={handleImageGeneration}>
+              <Input
+                placeholder="Describe the image you want to generate..."
+                value={imagePrompt}
+                onChange={(e) => setImagePrompt(e.target.value)}
+                disabled={isGenerating}
+              />
+              <Button
+                type="submit"
+                disabled={isGenerating}
+                className="bg-gradient-to-r from-red-500 to-cyan-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Generate
+              </Button>
+            </form>
+          )}
         </div>
       </div>
     </div>
