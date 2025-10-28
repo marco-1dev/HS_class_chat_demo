@@ -15,6 +15,8 @@ type MessageType = {
   content: string;
   imageData?: string;
   mimeType?: string;
+
+  
 }
 
 export function Chatbot() {
