@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { useChat } from "ai/react";
 import ReactMarkdown from 'react-markdown';
 import { useState } from 'react';
+import Image from 'next/image';
 
 type MessageType = {
   role: 'user' | 'assistant';
@@ -133,7 +134,8 @@ export function Chatbot() {
                   </ReactMarkdown>
                   {/* Display generated image if available */}
                   {mode === 'image' && 'imageData' in m && m.imageData && (
-                    <div className="mt-3">
+                    <div className="mt-3 relative w-full" style={{ minHeight: '200px' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={`data:${m.mimeType || 'image/png'};base64,${m.imageData}`}
                         alt="Generated image"

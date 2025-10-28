@@ -14,8 +14,34 @@ export async function POST(request: NextRequest) {
       contents: prompt,
     });
 
+    // Check if response has candidates
+    if (!response.candidates || response.candidates.length === 0) {
+      return new Response(JSON.stringify({
+        success: false,
+        error: 'No candidates returned from API'
+      }), {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+
+    const firstCandidate = response.candidates[0];
+    if (!firstCandidate.content || !firstCandidate.content.parts) {
+      return new Response(JSON.stringify({
+        success: false,
+        error: 'Invalid response structure from API'
+      }), {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+
     // Extract image data from response
-    for (const part of response.candidates[0].content.parts) {
+    for (const part of firstCandidate.content.parts) {
       if (part.inlineData) {
         const imageData = part.inlineData.data;
 
