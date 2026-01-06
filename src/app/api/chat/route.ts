@@ -75,12 +75,6 @@ Core Principles
 `;
 
 
-
-
-
-
-
-
 export async function POST(request: NextRequest) {
   const {messages} = await request.json();
    // Build conversation history with system prompt
