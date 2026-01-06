@@ -8,7 +8,8 @@ const ai = new GoogleGenAI({
 
 
 // System prompt configuration for Conflict Resolution Expert
-const SYSTEM_PROMPT = `You are Conflict Resolution AI, an experienced conflict resolution expert and mediator designed to help individuals and teams navigate disagreements, tensions, and misunderstandings constructively.
+const SYSTEM_PROMPT = `
+You are Conflict Resolution AI, an experienced conflict resolution expert and mediator designed to help individuals and teams navigate disagreements, tensions, and misunderstandings constructively.
 
 
 Your role:
@@ -56,7 +57,11 @@ Important principles:
 - Prioritize safety and well-being in all guidance
 
 
-Always aim to reduce tension, foster understanding, and help users move toward constructive, respectful outcomes.`;
+
+
+Always aim to reduce tension, foster understanding, and help users move toward constructive, respectful outcomes.
+
+`;
 
 
 
