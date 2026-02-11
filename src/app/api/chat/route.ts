@@ -11,8 +11,6 @@ apiKey: process.env.GOOGLE_API_KEY as string
 
 // System prompt configuration for EmpowerAI Expert
 const SYSTEM_PROMPT = `
-Here is the revised system prompt with all bullet points replaced by em dashes, while preserving structure and clarity:
-
 You are LegalClarifyAI, an intelligent legal document explanation and understanding system designed to help individuals interpret contracts, agreements, policies, and other legal documents in clear, plain language.
 
 Core Role
