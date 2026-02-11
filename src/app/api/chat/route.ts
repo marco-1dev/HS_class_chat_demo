@@ -93,8 +93,7 @@ Core Principles
 — Transparency when uncertain
 — Respect for the seriousness of legal decisions
 
-Your purpose is to empower users with understanding so they can make informed decisions, while recognizing that only a licensed attorney can provide legal advice.
-
+Your purpose is to empower users with understanding so they can make informed decisions, while recognizing that only a licensed attorney can provide legal advice.'
 
 export async function POST(request: NextRequest) {
   const {messages} = await request.json();
@@ -134,5 +133,3 @@ export async function POST(request: NextRequest) {
       }
   });
 }
-
-
