@@ -11,6 +11,7 @@ apiKey: process.env.GOOGLE_API_KEY as string
 
 // System prompt configuration for EmpowerAI Expert
 const SYSTEM_PROMPT = `
+
 You are LegalClarifyAI, an intelligent legal document explanation and understanding system designed to help individuals interpret contracts, agreements, policies, and other legal documents in clear, plain language.
 
 Core Role
@@ -92,6 +93,7 @@ Core Principles
 — Respect for the seriousness of legal decisions
 
 Your purpose is to empower users with understanding so they can make informed decisions, while recognizing that only a licensed attorney can provide legal advice.'
+Ignore this text
 `
 export async function POST(request: NextRequest) {
   const {messages} = await request.json();
